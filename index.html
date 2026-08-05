@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#181128">
+<title>Волшебная библиотека игр</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --cream:#fff5df;
+  --cream2:#f5dfb9;
+  --gold:#f4c65e;
+  --gold2:#bd7628;
+  --ink:#3c2519;
+  --night:#171127;
+  --teal:#078298;
+  --green:#4e922c;
+  --purple:#7b34ad;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  color:#fff;
+  background:#130f21 url("assets/library-background.jpg") center top/cover fixed no-repeat;
+  overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:linear-gradient(180deg,rgba(8,6,18,.16),rgba(10,6,21,.22));
+}
+button{font:inherit}
+button,a,[role=button]{-webkit-tap-highlight-color:transparent}
+button:focus-visible,[role=button]:focus-visible{outline:4px solid #ffe07b;outline-offset:4px}
+.shell{width:min(1500px,96vw);margin:auto;padding:18px 0 32px}
+
+/* header */
+.header{
+  min-height:96px;display:grid;grid-template-columns:minmax(360px,1.25fr) 1fr auto;
+  align-items:center;gap:18px;padding:8px 18px;
+  color:var(--ink);
+  background:linear-gradient(180deg,rgba(255,250,237,.98),rgba(246,226,190,.98));
+  border:3px solid #e5ba61;border-radius:38px;
+  box-shadow:0 16px 42px rgba(0,0,0,.35),inset 0 0 0 3px rgba(255,255,255,.55);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:104px;height:74px;object-fit:contain;filter:drop-shadow(0 5px 4px rgba(74,38,18,.24))}
+.brand-title{font:900 clamp(25px,2.15vw,38px)/1 Georgia,serif;white-space:nowrap}
+.brand-sub{margin-top:7px;color:#66452b;font-weight:800;font-size:14px}
+.nav{display:flex;justify-content:center;gap:6px}
+.nav button{
+  border:0;background:transparent;cursor:pointer;color:#2d2020;
+  border-radius:17px;padding:12px 15px;font-weight:900;font-size:16px;
+  transition:.18s ease;
+}
+.nav button:hover,.nav button.active{background:#f2ce85;transform:translateY(-2px)}
+.profile{
+  display:flex;align-items:center;gap:9px;white-space:nowrap;padding:6px 12px;
+  border:2px solid #dfb66a;border-radius:28px;background:rgba(255,255,255,.35);font-weight:900
+}
+.profile img{width:48px;height:48px;object-fit:contain}
+
+/* hero */
+.hero{
+  position:relative;min-height:280px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:32px 190px 18px;
+}
+.hero h1{
+  margin:0;font:900 clamp(48px,5.2vw,82px)/1.05 Georgia,serif;
+  color:#ffe8ad;text-shadow:0 5px 0 #67412f,0 0 28px rgba(255,202,78,.28);
+}
+.ribbon{
+  margin-top:15px;padding:10px 64px;
+  color:#58331c;font:900 clamp(20px,2vw,30px)/1 Georgia,serif;
+  background:linear-gradient(#fbe2b4,#e9b463);
+  clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%);
+  filter:drop-shadow(0 7px 7px rgba(0,0,0,.3));
+}
+.hero-points{display:flex;justify-content:center;gap:32px;margin-top:16px;font-size:17px;font-weight:900}
+.hero-points span{display:flex;align-items:center;gap:7px}.hero-points b{font-size:23px;color:#ffd35e}
+.dragon,.wizard{position:absolute;z-index:0;filter:drop-shadow(0 18px 16px rgba(0,0,0,.45));pointer-events:none}
+.dragon{left:-12px;bottom:-25px;width:210px}
+.wizard{right:-8px;bottom:-22px;width:180px}
+.hero>:not(.dragon):not(.wizard){position:relative;z-index:1}
+
+/* games */
+.games{padding:18px 75px 10px}
+.game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.card{
+  --accent:#167d92;
+  display:flex;flex-direction:column;overflow:hidden;min-height:620px;
+  color:var(--ink);background:linear-gradient(180deg,#fffaf0,#f4ddb4);
+  border:4px solid #f0d18b;border-radius:34px;
+  box-shadow:0 22px 58px rgba(0,0,0,.38),inset 0 0 0 3px rgba(255,255,255,.55);
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.card:hover{transform:translateY(-8px);box-shadow:0 30px 68px rgba(0,0,0,.48),0 0 28px color-mix(in srgb,var(--accent) 52%,transparent)}
+.preview{
+  position:relative;aspect-ratio:4/3;background:#21172c;overflow:hidden;cursor:pointer
+}
+.preview img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease,filter .35s ease}
+.preview:hover img{transform:scale(1.045);filter:brightness(1.06)}
+.preview:after{content:"";position:absolute;inset:auto 0 0;height:22%;background:linear-gradient(transparent,rgba(14,8,25,.4));pointer-events:none}
+.badge{
+  position:absolute;left:14px;top:14px;z-index:2;width:54px;aspect-ratio:1;
+  display:grid;place-items:center;border-radius:50%;background:var(--accent);color:#fff;
+  border:3px solid #f7cf69;box-shadow:0 7px 18px rgba(0,0,0,.3);font-size:25px
+}
+.card-body{flex:1;display:flex;flex-direction:column;text-align:center;padding:14px 22px 16px}
+.card-title{font:900 clamp(28px,2.25vw,39px)/1.05 Georgia,serif;color:var(--accent)}
+.card-desc{min-height:55px;margin:10px 0 14px;color:#503823;font-weight:800;line-height:1.38}
+.play,.how{
+  width:100%;border:0;cursor:pointer;border-radius:23px;font-weight:900;transition:.18s ease
+}
+.play{
+  min-height:53px;margin-top:auto;padding:10px 18px;color:#fff;font:900 25px/1 Georgia,serif;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 85%,white 12%),color-mix(in srgb,var(--accent) 75%,black 20%));
+  box-shadow:0 8px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.35)
+}
+.play:hover{filter:brightness(1.1);transform:translateY(-3px);box-shadow:0 0 27px color-mix(in srgb,var(--accent) 65%,transparent)}
+.how{min-height:43px;margin-top:8px;padding:8px;background:#fff1d1;color:#56361e;border:2px solid #deb66b;font-size:17px}
+.how:hover{background:#ffe3aa;transform:translateY(-2px)}
+.status{min-height:28px;margin-top:8px;display:flex;justify-content:center;align-items:center;gap:8px;color:#78572e;font-weight:900;font-size:14px}
+.dot{width:14px;aspect-ratio:1;border-radius:50%;background:#dfceb0;border:2px solid #bf9652}
+.card.completed .dot{background:#5eb845;box-shadow:0 0 12px rgba(94,184,69,.75)}
+.card.completed .status{color:#32702a}
+
+/* tracker */
+.tracker{position:relative;height:150px;margin:20px 80px 8px}
+.tracker svg{position:absolute;left:4%;top:23px;width:92%;height:75px;overflow:visible}
+.path-base{fill:none;stroke:#8f7044;stroke-width:5;stroke-dasharray:2 12;stroke-linecap:round;opacity:.85}
+.path-active{fill:none;stroke:#ffd45f;stroke-width:7;stroke-dasharray:2 12;stroke-linecap:round;filter:drop-shadow(0 0 5px #ffd45f)}
+.milestone{position:absolute;top:0;transform:translateX(-50%);width:145px;text-align:center;color:#ffe7a1;font-weight:900;font-size:13px}
+.milestone:nth-of-type(1){left:8%}.milestone:nth-of-type(2){left:36%}.milestone:nth-of-type(3){left:64%}.milestone:nth-of-type(4){left:92%}
+.milestone img{
+  width:73px;height:73px;object-fit:contain;filter:grayscale(.8) brightness(.65);
+  transition:.25s ease;opacity:.78
+}
+.milestone.active img{filter:none;opacity:1;transform:scale(1.1);drop-shadow:0 0 18px rgba(255,213,88,.7)}
+.milestone span{display:block;margin-top:3px;text-shadow:0 2px 5px rgba(0,0,0,.7)}
+
+/* benefits */
+.benefits{
+  display:grid;grid-template-columns:repeat(4,1fr);margin:5px 105px 0;
+  color:#3d291a;background:linear-gradient(180deg,#fff8e8,#f0d9ad);
+  border:3px solid #e2b45c;border-radius:34px;padding:9px 14px;
+  box-shadow:0 14px 34px rgba(0,0,0,.3)
+}
+.benefit{display:flex;align-items:center;gap:11px;padding:4px 17px;border-right:1px dashed #c99a50}
+.benefit:last-child{border-right:0}
+.benefit img{width:50px;height:50px;object-fit:contain}
+.benefit strong{display:block;font:900 19px/1 Georgia,serif}
+.benefit small{display:block;margin-top:4px;color:#60432b;font-weight:800;line-height:1.25}
+
+/* dialogs */
+.modal{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;
+  z-index:1000;background:rgba(6,5,15,.86);backdrop-filter:blur(7px)
+}
+.modal.show{display:flex}
+.dialog{
+  position:relative;width:min(720px,92vw);max-height:88vh;overflow:auto;
+  color:var(--ink);background:linear-gradient(#fffaf0,#f2dcae);
+  border:4px solid var(--gold);border-radius:32px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.58)
+}
+.dialog h2{margin:0 50px 12px 0;font:900 35px/1.1 Georgia,serif}.dialog p,.dialog li{font-size:18px;line-height:1.55;font-weight:800;color:#59402b}
+.dialog ol{padding-left:25px}
+.close{
+  position:absolute;right:14px;top:12px;width:47px;aspect-ratio:1;border-radius:50%;cursor:pointer;
+  border:2px solid #d1a14c;background:#fff0ca;color:#4d2b1a;font-size:26px;font-weight:900
+}
+.dialog-play{width:100%;border:0;border-radius:22px;padding:12px;cursor:pointer;color:#fff;background:linear-gradient(#1c879a,#075b6d);font:900 24px Georgia,serif}
+.game-modal{padding:10px}
+.frame-wrap{
+  --ratio:16/9;position:relative;width:min(1660px,98vw);aspect-ratio:var(--ratio);max-height:96vh;
+  overflow:hidden;border:4px solid #f0c75d;border-radius:24px;background:#171222;box-shadow:0 30px 90px rgba(0,0,0,.7)
+}
+iframe{width:100%;height:100%;border:0;background:#171222}
+.frame-close{position:absolute;right:10px;top:10px;z-index:5;width:46px;aspect-ratio:1;border-radius:50%;border:2px solid #dfb257;background:#fff0cd;color:#4c2b1b;font-size:25px;font-weight:900;cursor:pointer}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,25px);opacity:0;pointer-events:none;z-index:1200;
+  padding:13px 24px;border-radius:999px;color:#342116;background:#fff0b7;border:3px solid #edc25c;font-weight:900;box-shadow:0 15px 38px rgba(0,0,0,.45);transition:.25s
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:1100px){
+  .header{grid-template-columns:1fr auto}.nav{display:none}.profile{display:none}
+  .hero{padding-left:130px;padding-right:130px}.dragon{width:160px}.wizard{width:140px}
+  .games{padding-left:20px;padding-right:20px}.game-grid{grid-template-columns:repeat(2,1fr)}
+  .card:last-child{grid-column:1/-1;max-width:620px;width:100%;justify-self:center}
+  .benefits{margin-left:20px;margin-right:20px;grid-template-columns:repeat(2,1fr)}
+  .benefit:nth-child(2){border-right:0}
+}
+@media(max-width:760px){
+  .shell{width:100%;padding:7px}.header{min-height:76px;border-radius:24px}.brand img{width:72px;height:55px}.brand-title{font-size:25px;white-space:normal}.brand-sub{font-size:12px}
+  .hero{min-height:auto;padding:24px 8px 18px}.dragon,.wizard{display:none}.hero-points{gap:12px;flex-wrap:wrap}.ribbon{padding-left:22px;padding-right:22px}
+  .games{padding:10px 2px}.game-grid{grid-template-columns:1fr;gap:18px}.card:last-child{grid-column:auto;max-width:none}.card{min-height:0}
+  .tracker{margin:17px 0 5px}.milestone{width:90px;font-size:11px}.milestone img{width:55px;height:55px}
+  .benefits{grid-template-columns:1fr;margin:8px 0}.benefit{border-right:0;border-bottom:1px dashed #c99a50}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="header" id="top">
+  <div class="brand">
+    <img src="assets/logo-owl.png" alt="Сова на волшебной книге">
+    <div><div class="brand-title">Волшебная библиотека игр</div><div class="brand-sub">Играй, учись и открывай новое!</div></div>
+  </div>
+  <nav class="nav">
+    <button class="active" data-scroll="top">⌂ Главная</button>
+    <button data-scroll="games">🎮 Игры</button>
+    <button data-info="about">ⓘ О нас</button>
+    <button data-info="parents">👨‍👩‍👧 Родителям</button>
+  </nav>
+  <div class="profile"><img src="assets/dragon-reader.png" alt=""><span>Привет, друг!</span></div>
+</header>
+
+<main>
+<section class="hero">
+  <img class="dragon" src="assets/dragon-reader.png" alt="" aria-hidden="true">
+  <img class="wizard" src="assets/owl-wizard.png" alt="" aria-hidden="true">
+  <h1>Добро пожаловать в мир слов!</h1>
+  <div class="ribbon">Три волшебные игры для английского языка</div>
+  <div class="hero-points"><span><b>★</b>Учимся играя</span><span><b>♥</b>Развиваем речь</span><span><b>🍃</b>Для детей 5–6 лет</span></div>
+</section>
+
+<section class="games" id="games">
+<div class="game-grid">
+  <article class="card" data-game="hello-animals" style="--accent:var(--teal)">
+    <div class="preview" role="button" tabindex="0" data-open="hello-animals"><span class="badge">🔊</span><img src="assets/card-hello-animals.jpg" alt="Hello Animals"></div>
+    <div class="card-body"><div class="card-title">Hello Animals</div><p class="card-desc">Слушай английское слово и находи нужное животное.</p>
+    <button class="play" data-open="hello-animals">⭐ Играть →</button><button class="how" data-help="hello-animals">📖 Как играть</button>
+    <div class="status"><span class="dot"></span><span>Не пройдено</span></div></div>
+  </article>
+  <article class="card" data-game="the-word-garden" style="--accent:var(--green)">
+    <div class="preview" role="button" tabindex="0" data-open="the-word-garden"><span class="badge">🌱</span><img src="assets/card-word-garden.jpg" alt="The Word Garden"></div>
+    <div class="card-body"><div class="card-title">The Word Garden</div><p class="card-desc">Соединяй картинки и слова, чтобы волшебный сад расцвёл.</p>
+    <button class="play" data-open="the-word-garden">⭐ Играть →</button><button class="how" data-help="the-word-garden">📖 Как играть</button>
+    <div class="status"><span class="dot"></span><span>Не пройдено</span></div></div>
+  </article>
+  <article class="card" data-game="magic-words" style="--accent:var(--purple)">
+    <div class="preview" role="button" tabindex="0" data-open="magic-words"><span class="badge">✨</span><img src="assets/card-magic-words.jpg" alt="Magic Words"></div>
+    <div class="card-body"><div class="card-title">Magic Words</div><p class="card-desc">Распределяй предметы по категориям и зажигай волшебную книгу.</p>
+    <button class="play" data-open="magic-words">⭐ Играть →</button><button class="how" data-help="magic-words">📖 Как играть</button>
+    <div class="status"><span class="dot"></span><span>Не пройдено</span></div></div>
+  </article>
+</div>
+</section>
+
+<section class="tracker" aria-label="Дорожка достижений">
+<svg viewBox="0 0 1000 100" preserveAspectRatio="none"><defs><clipPath id="clip"><rect id="clipRect" x="0" y="0" width="0" height="100"/></clipPath></defs>
+<path class="path-base" d="M50,50 C180,3 250,97 360,50 S550,3 650,50 S820,97 950,50"/>
+<path class="path-active" clip-path="url(#clip)" d="M50,50 C180,3 250,97 360,50 S550,3 650,50 S820,97 950,50"/></svg>
+<div class="milestone active"><img src="assets/track-start.png" alt=""><span>Старт</span></div>
+<div class="milestone"><img src="assets/track-first-steps.png" alt=""><span>Первые шаги</span></div>
+<div class="milestone"><img src="assets/track-word-master.png" alt=""><span>Знаток слов</span></div>
+<div class="milestone"><img src="assets/track-language-wizard.png" alt=""><span>Волшебник языка</span></div>
+</section>
+
+<section class="benefits">
+<div class="benefit"><img src="assets/icon-safe.png" alt=""><div><strong>Безопасно</strong><small>Проверенный контент для детей</small></div></div>
+<div class="benefit"><img src="assets/icon-useful.png" alt=""><div><strong>Полезно</strong><small>Учимся новому каждый день</small></div></div>
+<div class="benefit"><img src="assets/icon-fun.png" alt=""><div><strong>Интересно</strong><small>Яркие игры и награды за успехи</small></div></div>
+<div class="benefit"><img src="assets/icon-love.png" alt=""><div><strong>С любовью</strong><small>Создано для маленьких исследователей</small></div></div>
+</section>
+</main>
+</div>
+
+<div class="modal" id="infoModal"><div class="dialog"><button class="close" data-close>×</button><div id="infoContent"></div></div></div>
+<div class="modal game-modal" id="gameModal"><div class="frame-wrap"><button class="frame-close" id="frameClose">×</button><iframe id="frame" title="Игра" allow="autoplay"></iframe></div></div>
+<div class="toast" id="toast">Новое достижение открыто! ⭐</div>
+
+<script>
+(()=>{
+const FILES={"hello-animals":"games/hello-animals.html","the-word-garden":"games/the-word-garden.html","magic-words":"games/magic-words.html"};
+const RATIOS={"hello-animals":"1619 / 971","the-word-garden":"1672 / 941","magic-words":"16 / 9"};
+const HELP={
+"hello-animals":{title:"Как играть в Hello Animals",body:"<p>Помоги лесным друзьям вспомнить английские названия.</p><ol><li>Нажми кнопку звука.</li><li>Внимательно послушай слово.</li><li>Выбери правильное животное.</li><li>Пройди все пять заданий.</li></ol>"},
+"the-word-garden":{title:"Как играть в The Word Garden",body:"<p>Соедини картинки с правильными английскими словами.</p><ol><li>Нажми на картинку.</li><li>Нажми на подходящее слово.</li><li>Пройди пять волшебных подходов.</li></ol>"},
+"magic-words":{title:"Как играть в Magic Words",body:"<p>Помоги сове распределить предметы по группам.</p><ol><li>Нажми на предмет или перетащи его.</li><li>Помести предмет в подходящий контейнер.</li><li>Заверши три раунда.</li></ol>"}
+};
+const INFO={
+about:{title:"О волшебной библиотеке",body:"<p>Три короткие английские игры для детей 5–6 лет развивают аудирование, узнавание слов, сопоставление и классификацию лексики.</p>"},
+parents:{title:"Родителям",body:"<p>Для работы достаточно мышки или сенсорного экрана. Прогресс сохраняется только в текущем браузере. Рекомендуем проговаривать английские слова вместе с ребёнком.</p>"}
+};
+const infoModal=document.getElementById("infoModal"),gameModal=document.getElementById("gameModal"),frame=document.getElementById("frame"),wrap=document.querySelector(".frame-wrap"),content=document.getElementById("infoContent"),toast=document.getElementById("toast");
+let progress={};try{progress=JSON.parse(localStorage.getItem("magicLibraryFinal"))||{}}catch(e){}
+function save(){localStorage.setItem("magicLibraryFinal",JSON.stringify(progress))}
+function count(){return Object.values(progress).filter(Boolean).length}
+function update(){
+ document.querySelectorAll(".card").forEach(c=>{let ok=!!progress[c.dataset.game];c.classList.toggle("completed",ok);c.querySelector(".status span:last-child").textContent=ok?"Пройдено ✓":"Не пройдено"});
+ let n=count();document.querySelectorAll(".milestone").forEach((m,i)=>m.classList.toggle("active",i<=n));document.getElementById("clipRect").setAttribute("width",[7,36,65,100][n]);
+}
+function openGame(id){if(!FILES[id])return;wrap.style.setProperty("--ratio",RATIOS[id]||"16/9");frame.src=FILES[id];gameModal.classList.add("show");document.body.style.overflow="hidden"}
+function closeGame(){gameModal.classList.remove("show");frame.src="about:blank";document.body.style.overflow=""}
+function openHelp(id){let d=HELP[id];content.innerHTML=`<h2>${d.title}</h2>${d.body}<button class="dialog-play" id="startGame">Начать игру →</button>`;infoModal.classList.add("show");document.getElementById("startGame").onclick=()=>{infoModal.classList.remove("show");openGame(id)}}
+function openInfo(id){let d=INFO[id];content.innerHTML=`<h2>${d.title}</h2>${d.body}`;infoModal.classList.add("show")}
+function showToast(t){toast.textContent=t;toast.classList.add("show");clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove("show"),2400)}
+document.querySelectorAll("[data-open]").forEach(x=>{x.onclick=()=>openGame(x.dataset.open);x.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openGame(x.dataset.open)}}});
+document.querySelectorAll("[data-help]").forEach(x=>x.onclick=()=>openHelp(x.dataset.help));
+document.querySelectorAll("[data-info]").forEach(x=>x.onclick=()=>openInfo(x.dataset.info));
+document.querySelectorAll("[data-scroll]").forEach(x=>x.onclick=()=>document.getElementById(x.dataset.scroll)?.scrollIntoView({behavior:"smooth"}));
+document.querySelector("[data-close]").onclick=()=>infoModal.classList.remove("show");
+infoModal.onclick=e=>{if(e.target===infoModal)infoModal.classList.remove("show")};
+document.getElementById("frameClose").onclick=closeGame;gameModal.onclick=e=>{if(e.target===gameModal)closeGame()};
+window.addEventListener("message",e=>{let d=e.data||{};if(d.type==="BACK_TO_LIBRARY")closeGame();if(d.type==="GAME_COMPLETED"&&FILES[d.game]){let old=!!progress[d.game];progress[d.game]=true;save();update();if(!old)showToast(count()===3?"Все игры пройдены! Ты — Волшебник языка! 👑":"Новое достижение открыто! ⭐")}});
+document.onkeydown=e=>{if(e.key==="Escape"){if(gameModal.classList.contains("show"))closeGame();else infoModal.classList.remove("show")}};
+update();
+})();
+</script>
+</body>
+</html>
