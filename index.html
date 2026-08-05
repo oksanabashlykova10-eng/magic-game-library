@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Волшебная библиотека игр</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root{
+  --cream:#fff5df;
+  --cream-2:#f8e8c7;
+  --gold:#f4c45c;
+  --gold-deep:#b87922;
+  --navy:#11152e;
+  --navy-2:#211635;
+  --ink:#342317;
+  --blue:#087b91;
+  --green:#4f8b2e;
+  --purple:#7836ad;
+  --shadow:0 20px 55px rgba(0,0,0,.34);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:#fff;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% 14%,rgba(97,67,160,.23),transparent 30%),
+    radial-gradient(circle at 15% 55%,rgba(15,120,95,.14),transparent 28%),
+    linear-gradient(180deg,#121126 0%,#171229 55%,#0f1320 100%);
+  overflow-x:hidden;overflow-y:auto;
+}
+button{font:inherit}
+button:focus-visible,a:focus-visible{outline:4px solid #ffd76a;outline-offset:4px}
+
+/* illustrated library background, built in CSS */
+.library-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:-2;overflow:hidden;
+}
+.library-bg::before,.library-bg::after{
+  content:"";position:absolute;top:0;bottom:0;width:17vw;min-width:190px;
+  background:
+    linear-gradient(90deg,rgba(7,7,15,.88),rgba(20,14,31,.42)),
+    repeating-linear-gradient(90deg,#38233c 0 12px,#7a4b2b 12px 22px,#263b55 22px 36px,#a36a2e 36px 47px);
+  box-shadow:inset -20px 0 45px rgba(0,0,0,.65);
+  opacity:.72;
+}
+.library-bg::before{left:0}
+.library-bg::after{right:0;transform:scaleX(-1)}
+.shelf-lines{
+  position:absolute;left:0;right:0;top:15%;bottom:8%;
+  background:repeating-linear-gradient(180deg,transparent 0 125px,rgba(130,74,32,.82) 125px 138px,rgba(22,12,12,.7) 138px 145px);
+  opacity:.48;
+}
+.sparkles{position:absolute;inset:0;background-image:
+ radial-gradient(circle,#ffd878 0 2px,transparent 3px),
+ radial-gradient(circle,#fff2af 0 1.5px,transparent 2.5px);
+ background-size:125px 125px,180px 180px;background-position:0 0,50px 70px;
+ opacity:.42;animation:twinkle 3.2s ease-in-out infinite alternate;
+}
+@keyframes twinkle{to{opacity:.18}}
+
+.site-shell{width:min(1440px,96vw);margin:0 auto;padding:18px 0 28px}
+
+/* top navigation */
+.topbar{
+  display:grid;grid-template-columns:minmax(310px,1.3fr) 1fr auto;
+  align-items:center;gap:18px;
+  min-height:98px;padding:10px 18px;
+  color:var(--ink);
+  background:linear-gradient(180deg,#fff9eb,#f7e6c5);
+  border:3px solid #e8bd67;border-radius:42px;
+  box-shadow:0 14px 36px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.55);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{width:105px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(95,55,22,.2))}
+.brand-text{min-width:0}
+.brand-title{font-family:Georgia,serif;font-weight:800;font-size:clamp(23px,2.05vw,35px);line-height:1;white-space:nowrap}
+.brand-sub{font-size:15px;margin-top:7px;font-weight:700;color:#654728}
+.nav{display:flex;justify-content:center;gap:7px}
+.nav button{
+  border:0;background:transparent;color:#221b25;cursor:pointer;
+  padding:12px 16px;border-radius:18px;font-weight:800;font-size:16px;
+  transition:.18s ease;
+}
+.nav button:hover,.nav button.active{background:#f1ce8a;transform:translateY(-2px)}
+.profile{
+  position:relative;display:flex;align-items:center;gap:9px;
+  padding:7px 12px;border:2px solid #e6c27d;border-radius:28px;background:rgba(255,255,255,.35);
+  font-weight:800;white-space:nowrap;
+}
+.profile-dot{
+  width:47px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,#78af4a,#3f6e33);border:3px solid #d6a542;font-size:27px;
+}
+
+/* hero */
+.hero{
+  position:relative;text-align:center;padding:30px 150px 15px;
+}
+.hero h1{
+  margin:0;font-family:Georgia,serif;font-size:clamp(44px,5.4vw,82px);line-height:1.03;
+  color:#ffedbd;text-shadow:0 5px 0 #5f3a2d,0 0 24px rgba(255,205,83,.24);
+}
+.ribbon{
+  display:inline-block;margin-top:13px;padding:10px 58px;
+  color:#57331d;font-family:Georgia,serif;font-weight:800;font-size:clamp(19px,2vw,30px);
+  background:linear-gradient(#f9deb0,#eab86e);
+  clip-path:polygon(4% 0,96% 0,100% 50%,96% 100%,4% 100%,0 50%);
+  filter:drop-shadow(0 7px 6px rgba(0,0,0,.28));
+}
+.hero-points{display:flex;justify-content:center;gap:32px;margin-top:14px;font-weight:800;font-size:17px}
+.hero-points span{display:flex;align-items:center;gap:8px}
+.hero-points b{color:#ffd46a;font-size:23px}
+.dragon{
+  position:absolute;left:-32px;bottom:-105px;width:210px;filter:drop-shadow(0 16px 16px rgba(0,0,0,.4));
+}
+.wizard{
+  position:absolute;right:-10px;bottom:-95px;width:170px;filter:drop-shadow(0 16px 16px rgba(0,0,0,.4));
+}
+
+/* cards */
+.games-section{position:relative;padding:18px 72px 8px}
+.games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.game-card{
+  position:relative;overflow:hidden;border-radius:34px;
+  color:var(--ink);background:linear-gradient(#fffaf0,#f5e2bb);
+  border:4px solid #f3d791;box-shadow:var(--shadow),inset 0 0 0 3px rgba(255,255,255,.55);
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.game-card:hover{transform:translateY(-9px);box-shadow:0 27px 65px rgba(0,0,0,.42),0 0 28px color-mix(in srgb,var(--accent) 60%,transparent)}
+.card-image{
+  position:relative;height:245px;overflow:hidden;cursor:pointer;background:#243;
+}
+.card-image img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .35s ease}
+.card-image:hover img{transform:scale(1.045);filter:brightness(1.08)}
+.card-image::after{
+  content:"";position:absolute;inset:auto 0 0;height:30%;
+  background:linear-gradient(transparent,rgba(15,10,23,.45));pointer-events:none;
+}
+.game-badge{
+  position:absolute;left:14px;top:14px;width:53px;aspect-ratio:1;border-radius:50%;
+  display:grid;place-items:center;color:#fff;background:var(--accent);
+  border:3px solid #f8ce6c;box-shadow:0 5px 14px rgba(0,0,0,.28);z-index:2;font-size:25px;
+}
+.card-body{text-align:center;padding:11px 22px 17px}
+.card-logo{
+  font-family:Georgia,serif;font-size:clamp(25px,2.2vw,36px);font-weight:900;color:var(--accent);
+  line-height:1.05;margin-bottom:7px;
+}
+.card-desc{min-height:43px;margin:0 0 10px;color:#4b3727;font-weight:700;line-height:1.35}
+.play-btn,.how-btn{
+  width:100%;border:0;cursor:pointer;border-radius:23px;font-weight:900;transition:.18s ease;
+}
+.play-btn{
+  padding:11px 20px;color:#fff;font-family:Georgia,serif;font-size:25px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 85%,#fff 10%),color-mix(in srgb,var(--accent) 72%,#000 20%));
+  box-shadow:0 7px 14px rgba(0,0,0,.23),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.play-btn:hover{transform:translateY(-3px);filter:brightness(1.08);box-shadow:0 0 25px color-mix(in srgb,var(--accent) 62%,transparent)}
+.how-btn{
+  margin-top:8px;padding:8px;color:#52331d;border:2px solid #e4bf78;background:#fff2d5;font-size:17px;
+}
+.how-btn:hover{background:#ffe8b7;transform:translateY(-2px)}
+.card-status{
+  margin-top:9px;display:flex;justify-content:center;align-items:center;gap:8px;
+  min-height:28px;font-weight:800;color:#74542f;font-size:14px;
+}
+.status-dot{width:14px;aspect-ratio:1;border-radius:50%;background:#e4d3b5;border:2px solid #c59c52}
+.game-card.completed .status-dot{background:#65b94d;box-shadow:0 0 12px rgba(101,185,77,.65)}
+.game-card.completed .card-status{color:#36732c}
+
+/* tracker */
+.tracker{
+  position:relative;margin:10px 65px 8px;height:124px;
+}
+.tracker svg{position:absolute;left:3%;right:3%;top:11px;width:94%;height:72px;overflow:visible}
+.tracker-base{fill:none;stroke:#81623c;stroke-width:5;stroke-linecap:round;stroke-dasharray:2 12;opacity:.75}
+.tracker-active{fill:none;stroke:#ffd35d;stroke-width:7;stroke-linecap:round;stroke-dasharray:2 12;filter:drop-shadow(0 0 5px #ffd35d)}
+.milestone{
+  position:absolute;top:7px;transform:translateX(-50%);width:132px;text-align:center;
+  color:#f9e4a9;font-weight:800;font-size:13px;
+}
+.milestone .icon{
+  width:58px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;margin:0 auto 5px;
+  background:#3b2e35;border:3px solid #8b6f48;color:#806d52;font-size:30px;
+  box-shadow:0 7px 15px rgba(0,0,0,.3);transition:.25s ease;
+}
+.milestone.active .icon{
+  color:#fff0a5;background:linear-gradient(#a7602c,#553021);border-color:#ffd765;
+  box-shadow:0 0 24px rgba(255,211,93,.65),0 8px 16px rgba(0,0,0,.35);transform:scale(1.08);
+}
+.milestone:nth-of-type(1){left:8%}
+.milestone:nth-of-type(2){left:36%}
+.milestone:nth-of-type(3){left:64%}
+.milestone:nth-of-type(4){left:92%}
+
+/* benefits */
+.benefits{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
+  margin:4px 100px 0;padding:10px 18px;color:#392617;
+  border:3px solid #e6bd70;border-radius:35px;background:linear-gradient(#fff8e9,#f4dfbb);
+  box-shadow:0 13px 30px rgba(0,0,0,.25);
+}
+.benefit{display:flex;align-items:center;gap:12px;padding:5px 18px;border-right:1px dashed #cc9f58}
+.benefit:last-child{border-right:0}
+.benefit-icon{font-size:38px;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18))}
+.benefit strong{display:block;font-family:Georgia,serif;font-size:19px}
+.benefit small{display:block;margin-top:3px;line-height:1.25;color:#5d4129;font-weight:700}
+
+/* modal */
+.modal{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(5,5,14,.84);backdrop-filter:blur(7px);z-index:1000;
+}
+.modal.show{display:flex}
+.dialog{
+  position:relative;width:min(720px,92vw);max-height:88vh;overflow:auto;
+  color:var(--ink);background:linear-gradient(#fffaf0,#f3dfb7);
+  border:4px solid #efc65e;border-radius:34px;padding:30px;
+  box-shadow:0 28px 80px rgba(0,0,0,.55);
+}
+.dialog h2{margin:0 45px 12px 0;font-family:Georgia,serif;color:#4f2b18;font-size:34px}
+.dialog p,.dialog li{font-size:18px;line-height:1.55;font-weight:700;color:#583e2a}
+.dialog ol{padding-left:25px}
+.modal-close{
+  position:absolute;right:15px;top:13px;width:46px;aspect-ratio:1;border-radius:50%;
+  border:2px solid #c7953c;background:#fff1cf;color:#4b2a18;font-size:25px;font-weight:900;cursor:pointer;
+}
+.dialog-play{
+  width:100%;border:0;border-radius:22px;padding:12px;color:#fff;cursor:pointer;
+  background:linear-gradient(#187e92,#075b6d);font-family:Georgia,serif;font-weight:900;font-size:24px;
+}
+
+/* game player */
+.game-modal{padding:12px}
+.game-frame-wrap{
+  position:relative;width:min(1600px,98vw);aspect-ratio:16/9;max-height:96vh;
+  border-radius:24px;overflow:hidden;border:4px solid #f1ca69;background:#161221;box-shadow:0 28px 90px rgba(0,0,0,.65);
+}
+.game-frame{width:100%;height:100%;border:0;background:#161221}
+.player-close{
+  position:absolute;right:10px;top:10px;z-index:5;width:46px;aspect-ratio:1;border-radius:50%;
+  border:2px solid #e6b958;background:#fff2d4;color:#4b271b;font-size:25px;font-weight:900;cursor:pointer;
+  box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,25px);
+  opacity:0;pointer-events:none;z-index:1200;padding:13px 24px;border-radius:999px;
+  color:#332114;background:#fff0bc;border:3px solid #efc45e;font-weight:900;
+  box-shadow:0 15px 38px rgba(0,0,0,.4);transition:.25s ease;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:1050px){
+  .topbar{grid-template-columns:1fr auto}.nav{display:none}.profile{display:none}
+  .hero{padding-left:100px;padding-right:100px}.dragon{width:155px}.wizard{width:135px}
+  .games-section{padding-left:18px;padding-right:18px}
+  .benefits{margin-left:20px;margin-right:20px}
+}
+@media(max-width:780px){
+  .site-shell{width:100%;padding:8px}
+  .topbar{border-radius:24px;min-height:75px}.brand img{width:80px;height:58px}.brand-title{white-space:normal}
+  .hero{padding:25px 8px 12px}.dragon,.wizard{display:none}.hero-points{gap:12px;flex-wrap:wrap}
+  .ribbon{padding-left:20px;padding-right:20px}
+  .games-grid{grid-template-columns:1fr}.card-image{height:220px}
+  .tracker{margin-left:0;margin-right:0}.milestone{width:90px;font-size:11px}.milestone .icon{width:48px}
+  .benefits{grid-template-columns:1fr 1fr;margin:10px 0}.benefit{border-right:0;border-bottom:1px dashed #cc9f58}
+}
+
+
+/* ===== Stable showcase layout: no clipping, no overlaps ===== */
+html, body{
+  min-height:100%;
+}
+
+body{
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.site-shell{
+  width:min(1480px,96vw);
+  margin:0 auto;
+  padding:18px 0 34px;
+}
+
+/* Header stays compact but never squeezes the content below */
+.topbar{
+  min-height:92px;
+  padding:10px 18px;
+  border-radius:38px;
+}
+
+/* Hero gets its own space; decorations no longer overlap the cards */
+.hero{
+  min-height:245px;
+  padding:28px 190px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:visible;
+}
+
+.hero h1{
+  margin:0;
+}
+
+.dragon{
+  left:-10px;
+  bottom:-10px;
+  width:180px;
+  z-index:1;
+}
+
+.wizard{
+  right:0;
+  bottom:-5px;
+  width:150px;
+  z-index:1;
+}
+
+.hero > :not(.dragon):not(.wizard){
+  position:relative;
+  z-index:2;
+}
+
+/* Cards start below the hero with proper breathing room */
+.games-section{
+  padding:22px 40px 12px;
+}
+
+.games-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:24px;
+  align-items:stretch;
+}
+
+.game-card{
+  display:flex;
+  flex-direction:column;
+  min-height:610px;
+  overflow:hidden;
+  border-radius:34px;
+}
+
+/* Full game preview: never crop the title or interface */
+.card-image{
+  height:auto;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  background:#161522;
+}
+
+.card-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  display:block;
+  background:#161522;
+}
+
+.card-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:16px 24px 18px;
+}
+
+.card-logo{
+  margin-bottom:8px;
+  font-size:clamp(29px,2.1vw,38px);
+}
+
+.card-desc{
+  min-height:58px;
+  margin:0 0 14px;
+  font-size:16px;
+  line-height:1.4;
+}
+
+.play-btn{
+  margin-top:auto;
+  min-height:54px;
+}
+
+.how-btn{
+  min-height:44px;
+}
+
+.card-status{
+  min-height:30px;
+  margin-top:10px;
+}
+
+/* Achievement road and benefits remain below the cards */
+.tracker{
+  margin:22px 72px 12px;
+  height:126px;
+}
+
+.benefits{
+  margin:10px 82px 0;
+}
+
+/* Remove the previous overly compressed laptop layout */
+@media (min-width:1051px) and (max-height:1000px){
+  .site-shell{padding:14px 0 30px}
+  .topbar{min-height:88px;padding:9px 16px}
+  .brand img{width:96px;height:66px}
+  .brand-title{font-size:31px}
+  .brand-sub{font-size:14px;margin-top:5px}
+  .nav button{padding:11px 14px;font-size:15px}
+  .profile{padding:6px 11px;font-size:15px}
+  .profile-dot{width:43px;font-size:24px}
+
+  .hero{
+    min-height:220px;
+    padding:24px 170px 20px;
+  }
+  .hero h1{font-size:64px}
+  .ribbon{margin-top:10px;padding:8px 48px;font-size:25px}
+  .hero-points{margin-top:10px;font-size:16px;gap:28px}
+  .dragon{width:165px;bottom:-6px}
+  .wizard{width:140px;bottom:-3px}
+
+  .games-section{padding:18px 36px 10px}
+  .games-grid{gap:20px}
+  .game-card{min-height:570px}
+  .card-body{padding:14px 20px 16px}
+  .card-logo{font-size:32px}
+  .card-desc{min-height:52px;font-size:15px}
+  .tracker{margin:18px 68px 10px;height:118px}
+  .benefits{margin:8px 72px 0}
+}
+
+/* Tablet */
+@media (max-width:1050px){
+  .hero{
+    min-height:215px;
+    padding:24px 110px 20px;
+  }
+  .dragon{width:145px}
+  .wizard{width:125px}
+  .games-section{padding:18px 18px 10px}
+  .games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .game-card{min-height:560px}
+  .games-grid .game-card:last-child{grid-column:1 / -1;max-width:620px;width:100%;justify-self:center}
+}
+
+/* Mobile */
+@media (max-width:780px){
+  .site-shell{width:100%;padding:8px}
+  .hero{min-height:auto;padding:24px 8px 18px}
+  .dragon,.wizard{display:none}
+  .games-section{padding:14px 4px 8px}
+  .games-grid{grid-template-columns:1fr;gap:18px}
+  .games-grid .game-card:last-child{grid-column:auto;max-width:none}
+  .game-card{min-height:0}
+  .card-body{padding:14px 18px 16px}
+  .card-desc{min-height:0}
+  .tracker{margin:16px 0 8px}
+  .benefits{margin:10px 0 0}
+}
+
+</style>
+</head>
+<body>
+<div class="library-bg"><div class="shelf-lines"></div><div class="sparkles"></div></div>
+
+<div class="site-shell">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/owl-logo.png" alt="Сова на волшебной книге">
+      <div class="brand-text">
+        <div class="brand-title">Волшебная библиотека игр</div>
+        <div class="brand-sub">Играй, учись и открывай новое!</div>
+      </div>
+    </div>
+    <nav class="nav" aria-label="Главная навигация">
+      <button class="active" data-scroll="top">⌂ Главная</button>
+      <button data-scroll="games">🎮 Игры</button>
+      <button data-info="about">ⓘ О нас</button>
+      <button data-info="parents">👨‍👩‍👧 Родителям</button>
+    </nav>
+    <div class="profile" title="Прогресс сохраняется в этом браузере">
+      <span class="profile-dot">🐉</span>
+      <span>Привет, друг!</span>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <img class="dragon" src="assets/dragon-reader.png" alt="" aria-hidden="true">
+      <img class="wizard" src="assets/owl-wizard.png" alt="" aria-hidden="true">
+      <h1>Добро пожаловать в мир слов!</h1>
+      <div class="ribbon">Три волшебные игры для английского языка</div>
+      <div class="hero-points">
+        <span><b>★</b> Учимся играя</span>
+        <span><b>♥</b> Развиваем речь</span>
+        <span><b>🍃</b> Для детей 5–6 лет</span>
+      </div>
+    </section>
+
+    <section class="games-section" id="games">
+      <div class="games-grid">
+        <article class="game-card" data-game="hello-animals" style="--accent:var(--blue)">
+          <div class="card-image" role="button" tabindex="0" data-open-game="hello-animals">
+            <span class="game-badge">🔊</span>
+            <img src="assets/hello-animals.jpg" alt="Игра Hello Animals">
+          </div>
+          <div class="card-body">
+            <div class="card-logo">Hello Animals</div>
+            <p class="card-desc">Слушай английское слово и находи нужное животное.</p>
+            <button class="play-btn" data-open-game="hello-animals">⭐ Играть →</button>
+            <button class="how-btn" data-instruction="hello-animals">📖 Как играть</button>
+            <div class="card-status"><span class="status-dot"></span><span class="status-text">Не пройдено</span></div>
+          </div>
+        </article>
+
+        <article class="game-card" data-game="the-word-garden" style="--accent:var(--green)">
+          <div class="card-image" role="button" tabindex="0" data-open-game="the-word-garden">
+            <span class="game-badge">🌱</span>
+            <img src="assets/word-garden.jpg" alt="Игра The Word Garden">
+          </div>
+          <div class="card-body">
+            <div class="card-logo">The Word Garden</div>
+            <p class="card-desc">Соединяй картинки и слова, чтобы волшебный сад расцвёл.</p>
+            <button class="play-btn" data-open-game="the-word-garden">⭐ Играть →</button>
+            <button class="how-btn" data-instruction="the-word-garden">📖 Как играть</button>
+            <div class="card-status"><span class="status-dot"></span><span class="status-text">Не пройдено</span></div>
+          </div>
+        </article>
+
+        <article class="game-card" data-game="magic-words" style="--accent:var(--purple)">
+          <div class="card-image" role="button" tabindex="0" data-open-game="magic-words">
+            <span class="game-badge">✨</span>
+            <img src="assets/magic-words.jpg" alt="Игра Magic Words">
+          </div>
+          <div class="card-body">
+            <div class="card-logo">Magic Words</div>
+            <p class="card-desc">Распределяй предметы по категориям и зажигай волшебную книгу.</p>
+            <button class="play-btn" data-open-game="magic-words">⭐ Играть →</button>
+            <button class="how-btn" data-instruction="magic-words">📖 Как играть</button>
+            <div class="card-status"><span class="status-dot"></span><span class="status-text">Не пройдено</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="tracker" aria-label="Дорога достижений">
+      <svg viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <clipPath id="progressClip"><rect id="progressRect" x="0" y="0" width="0" height="100"></rect></clipPath>
+        </defs>
+        <path class="tracker-base" d="M50,50 C180,4 250,96 360,50 S550,4 650,50 S820,96 950,50"></path>
+        <path class="tracker-active" clip-path="url(#progressClip)" d="M50,50 C180,4 250,96 360,50 S550,4 650,50 S820,96 950,50"></path>
+      </svg>
+      <div class="milestone active"><div class="icon">🏁</div><span>Старт</span></div>
+      <div class="milestone"><div class="icon">☆</div><span>Первые шаги</span></div>
+      <div class="milestone"><div class="icon">☆</div><span>Знаток слов</span></div>
+      <div class="milestone"><div class="icon">♛</div><span>Волшебник языка</span></div>
+    </section>
+
+    <section class="benefits">
+      <div class="benefit"><span class="benefit-icon">🛡️</span><div><strong>Безопасно</strong><small>Проверенный контент для детей</small></div></div>
+      <div class="benefit"><span class="benefit-icon">🧠</span><div><strong>Полезно</strong><small>Учимся новому каждый день</small></div></div>
+      <div class="benefit"><span class="benefit-icon">⭐</span><div><strong>Интересно</strong><small>Яркие игры и награды за успехи</small></div></div>
+      <div class="benefit"><span class="benefit-icon">❤️</span><div><strong>С любовью</strong><small>Создано для маленьких исследователей</small></div></div>
+    </section>
+  </main>
+</div>
+
+<!-- Instruction/info modal -->
+<div class="modal" id="infoModal" role="dialog" aria-modal="true">
+  <div class="dialog">
+    <button class="modal-close" data-close-modal>×</button>
+    <div id="dialogContent"></div>
+  </div>
+</div>
+
+<!-- Game player -->
+<div class="modal game-modal" id="gameModal" role="dialog" aria-modal="true">
+  <div class="game-frame-wrap">
+    <button class="player-close" id="playerClose">×</button>
+    <iframe class="game-frame" id="gameFrame" title="Окно игры" allow="autoplay"></iframe>
+  </div>
+</div>
+
+<div class="toast" id="toast">Новое достижение открыто! ⭐</div>
+
+<script>
+(() => {
+  const GAME_FILES = {
+    "hello-animals": "games/hello-animals.html",
+    "the-word-garden": "games/the-word-garden.html",
+    "magic-words": "games/magic-words.html"
+  };
+
+  const INSTRUCTIONS = {
+    "hello-animals": {
+      title: "Как играть в Hello Animals",
+      body: `
+        <p>Помоги лесным друзьям вспомнить их английские названия.</p>
+        <ol>
+          <li>Нажми кнопку звука и внимательно послушай слово.</li>
+          <li>Выбери животное, название которого прозвучало.</li>
+          <li>Пройди все пять заданий и получи награду.</li>
+        </ol>`
+    },
+    "the-word-garden": {
+      title: "Как играть в The Word Garden",
+      body: `
+        <p>Соедини картинки с правильными английскими словами.</p>
+        <ol>
+          <li>Нажми на картинку.</li>
+          <li>Затем нажми на подходящее слово.</li>
+          <li>Пройди пять подходов, чтобы сад полностью расцвёл.</li>
+        </ol>`
+    },
+    "magic-words": {
+      title: "Как играть в Magic Words",
+      body: `
+        <p>Помоги сове распределить волшебные предметы по группам.</p>
+        <ol>
+          <li>Нажми на предмет или перетащи его мышкой.</li>
+          <li>Помести предмет в подходящий контейнер.</li>
+          <li>Заверши три раунда и зажги волшебную книгу.</li>
+        </ol>`
+    }
+  };
+
+  const INFO = {
+    about: {
+      title: "О волшебной библиотеке",
+      body: `<p>Это мини-библиотека из трёх коротких английских игр для детей 5–6 лет. Игры развивают аудирование, узнавание слов, сопоставление и умение распределять лексику по категориям.</p>`
+    },
+    parents: {
+      title: "Информация для родителей",
+      body: `<p>Для игры достаточно мышки или сенсорного экрана. Рекомендуем проходить по одной игре за занятие и проговаривать английские слова вместе с ребёнком. Прогресс сохраняется только в текущем браузере.</p>`
+    }
+  };
+
+  const gameModal = document.getElementById("gameModal");
+  const gameFrame = document.getElementById("gameFrame");
+  const infoModal = document.getElementById("infoModal");
+  const dialogContent = document.getElementById("dialogContent");
+  const toast = document.getElementById("toast");
+
+  let pendingInstructionGame = null;
+  let progress = readProgress();
+
+  function readProgress() {
+    try {
+      return JSON.parse(localStorage.getItem("magicLibraryProgress")) || {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveProgress() {
+    localStorage.setItem("magicLibraryProgress", JSON.stringify(progress));
+  }
+
+  function completedCount() {
+    return Object.values(progress).filter(Boolean).length;
+  }
+
+  function updateUI() {
+    document.querySelectorAll(".game-card").forEach(card => {
+      const id = card.dataset.game;
+      const completed = !!progress[id];
+      card.classList.toggle("completed", completed);
+      card.querySelector(".status-text").textContent = completed ? "Пройдено ✓" : "Не пройдено";
+    });
+
+    const count = completedCount();
+    document.querySelectorAll(".milestone").forEach((node, index) => {
+      node.classList.toggle("active", index <= count);
+    });
+
+    const widths = [7, 36, 65, 100];
+    document.getElementById("progressRect").setAttribute("width", widths[count]);
+  }
+
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+
+  function openGame(id) {
+    if (!GAME_FILES[id]) return;
+    gameFrame.src = GAME_FILES[id];
+    gameModal.classList.add("show");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGame() {
+    gameModal.classList.remove("show");
+    gameFrame.src = "about:blank";
+    document.body.style.overflow = "";
+  }
+
+  function openInstruction(id) {
+    const data = INSTRUCTIONS[id];
+    if (!data) return;
+    pendingInstructionGame = id;
+    dialogContent.innerHTML = `
+      <h2>${data.title}</h2>
+      ${data.body}
+      <button class="dialog-play" id="instructionPlay">Начать игру →</button>`;
+    infoModal.classList.add("show");
+    document.getElementById("instructionPlay").addEventListener("click", () => {
+      infoModal.classList.remove("show");
+      openGame(id);
+    });
+  }
+
+  function openInfo(id) {
+    const data = INFO[id];
+    if (!data) return;
+    pendingInstructionGame = null;
+    dialogContent.innerHTML = `<h2>${data.title}</h2>${data.body}`;
+    infoModal.classList.add("show");
+  }
+
+  document.querySelectorAll("[data-open-game]").forEach(el => {
+    el.addEventListener("click", () => openGame(el.dataset.openGame));
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openGame(el.dataset.openGame);
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-instruction]").forEach(btn => {
+    btn.addEventListener("click", () => openInstruction(btn.dataset.instruction));
+  });
+
+  document.querySelectorAll("[data-info]").forEach(btn => {
+    btn.addEventListener("click", () => openInfo(btn.dataset.info));
+  });
+
+  document.querySelectorAll("[data-scroll]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById(btn.dataset.scroll)?.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+
+  document.querySelector("[data-close-modal]").addEventListener("click", () => infoModal.classList.remove("show"));
+  infoModal.addEventListener("click", e => {
+    if (e.target === infoModal) infoModal.classList.remove("show");
+  });
+
+  document.getElementById("playerClose").addEventListener("click", closeGame);
+  gameModal.addEventListener("click", e => {
+    if (e.target === gameModal) closeGame();
+  });
+
+  window.addEventListener("message", event => {
+    const data = event.data || {};
+    if (data.type === "BACK_TO_LIBRARY") {
+      closeGame();
+    }
+    if (data.type === "GAME_COMPLETED" && GAME_FILES[data.game]) {
+      const wasCompleted = !!progress[data.game];
+      progress[data.game] = true;
+      saveProgress();
+      updateUI();
+      if (!wasCompleted) {
+        const count = completedCount();
+        showToast(count === 3 ? "Все игры пройдены! Ты — Волшебник языка! 👑" : "Новое достижение открыто! ⭐");
+      }
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      if (gameModal.classList.contains("show")) closeGame();
+      else infoModal.classList.remove("show");
+    }
+  });
+
+  updateUI();
+})();
+</script>
+</body>
+</html>
